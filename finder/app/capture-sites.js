@@ -14,7 +14,7 @@ function getPage() {
 
 function capture() {
 	console.log("Capturing: ", site.name);
-	page.render('./captures/' + site.name + '.png');
+	page.render('./static/captures/' + site.name + '.png');
 	getPage();
 }
 
