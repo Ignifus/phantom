@@ -8,5 +8,7 @@ def finder(request):
 
 
 def find(request):
-    return HttpResponse(subprocess.check_output(['finder/app/phantomjs', 'finder/app/capture-sites.js']))
-
+    subprocess.run(['finder/app/phantomjs', 'finder/app/capture-sites.js', '--search=bicicleta', '--price=5000'])
+    with open('finder/app/reporte.html', 'r') as content_file:
+        content = content_file.read()
+    return HttpResponse(content)

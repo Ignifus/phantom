@@ -1,5 +1,4 @@
 [
-{"url": "https://www.facebook.com/", "name": "facebook"},
-{"url": "http://www.mercadolibre.com.ar/", "name": "mercadolibre"},
-{"url": "https://twitter.com/jonathan_blow", "name": "jonblow_twitter"}
+    {"url": "http://listado.mercadolibre.com.ar/", "name": "mercadolibre"},
+    {"url": "https://www.olx.com.ar/nf/search/", "name": "olx"}
 ]
