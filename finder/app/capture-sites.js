@@ -6,12 +6,11 @@ var fs     = require('fs');
 
 var site;
 var inner;
-var results;
-var params = {};
-var LOCKED = false;
+var results = [];
+var params  = {};
+var LOCKED  = false;
 
 function getPage() {
-    buildParams();
 	site = getSite();
 	if(!site) {
 		console.log('Finished');
@@ -49,17 +48,20 @@ page.onLoadFinished = function(status) {
 
 function capture() {
 	console.log("Capturing: ", site.name);
-	page.render('./captures/' + site.name + '.png');
+	page.render(params.PATH + site.name + '.png');
 }
 
 function captureInner() {
     console.log("Capturing: ", inner.title);
-    page.render('./captures/' + inner.image);
+    page.render(params.PATH + inner.image);
     getLinks(results);
 }
 
 function analyzeDom() {
-    results = page.evaluate(getEvaluator());
+    results = results.concat(page.evaluate(getEvaluator()));
+    if (params.SITE === 'all' && sites.length > 0) {
+        return getPage();
+    }
     results = results.filter(function(e) { return criteria(e.price, params.PRICE); });
     results = results.filter(function(e, i) { return i < params.LIMIT; });
     buildReport(results);
@@ -131,7 +133,7 @@ function buildReport(results) {
             var value = result[key];
             if(key === "image") {
                 //TODO refactor bosta
-                value = '<div class="hide"><a href="captures/' + result[key] + '" __target="blank"><img src="captures/' + result[key] + '" width="150"></a></div>';
+                value = '<div class="hide"><a href="captures/' + result[key] + '" __target="blank"><img src="' + params.PATH + result[key] + '" width="150"></a></div>';
             }
             if(key === "title") {
                 value = '<a href="' + result['url'] + '">' + value  + '</a>';
@@ -142,7 +144,8 @@ function buildReport(results) {
     });
 
     table += "</tbody></table>";
-    fs.write(params.OUT, table, 'w');
+    console.log(params.PATH + params.OUT);
+    fs.write(params.PATH + params.OUT, table, 'w');
 }
 
 function buildParams() {
@@ -171,6 +174,10 @@ function buildParams() {
         if(args[i].indexOf('--out=') >= 0) {
             params.OUT = args[i].replace('--out=', '');
         }
+
+        if(args[i].indexOf('--path=') >= 0) {
+            params.PATH = args[i].replace('--path=', '');
+        }
     }
 
     //normalization
@@ -184,7 +191,7 @@ function buildParams() {
     }
 
     if(params.SITE == null) {
-        params.SITE = 'mercadolibre';
+        params.SITE = 'all';
     }
 
     if(params.LIMIT == null) {
@@ -198,6 +205,17 @@ function buildParams() {
 
     if(params.OUT == null) {
         params.OUT = 'reporte.html';
+    }
+
+    if(params.PATH == null) {
+        params.PATH = './captures/';
+    }
+
+    var lastStr = params.PATH[params.PATH.length - 1];
+    console.log(lastStr);
+    if(lastStr !== '/' && lastStr !== "\\") {
+        console.log("ultimos string del --path / o \\ segun Sistema Operativo");
+        phantom.exit();
     }
 
     if(error) phantom.exit();
@@ -223,8 +241,9 @@ function criteria(price, refPrice) {
     phantom.exit();
 }
 
-function getEvaluator() {
-    switch(params.SITE) {
+function getEvaluator(siteName) {
+    var name = siteName || params.SITE;
+    switch(name) {
         case 'mercadolibre':
             return pageEvaluationML;
             break;
@@ -232,8 +251,7 @@ function getEvaluator() {
             return pageEvaluationOLX;
             break;
         case 'all':
-            console.log('--site=all no fue implementado aun');
-            phantom.exit();
+            return getEvaluator(site.name);
             break;
         default:
             console.log('--site= no soportado');
@@ -243,6 +261,10 @@ function getEvaluator() {
 }
 
 function getSite() {
+    if(params.SITE === 'all') {
+        return sites.pop();
+    }
+
     var selectedSite;
     sites = sites.filter(function(e, i) {
         if(e.name !== params.SITE) { 
@@ -259,4 +281,8 @@ function getSite() {
     return selectedSite;
 }
 
-getPage();
+//INIT
+(function() {
+    buildParams();
+    getPage();
+})();

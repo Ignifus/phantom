@@ -31,10 +31,12 @@ cuando el proceso termina genera un archivo llamado `reporte.html`. Este contien
 * refactorizar los evaluadores y separarlos en diferentes files.
 * hacer que interactue con un cron o backend para que el usuario pueda configurar sus busquedas
 * hacer que interacture con la paginacion (si hay 100 paginas que las navegue todas o una parte)
+* [DONE] --site=all
+* [DONE] --path=/path/to/captures/<PID>/
 
 Cuando los todos este completos el comando quedaria similar a lo siguiente
 
-> phantom.js capture-sites.js --search=bicicletas --price=4500 --limit=20 --criteria=gt --site=mercadolibre|all --out=reporte.html
+> phantom.js capture-sites.js --search=bicicletas --price=4500 --limit=20 --criteria=gt --site=mercadolibre|all --out=reporte.html --path=/path/to/captures/<PID>/
 
 mientras tanto es simplemte
 
