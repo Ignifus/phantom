@@ -1,0 +1,29 @@
+{% extends 'finder/base.html' %}
+
+{% block content %}
+    <article>
+
+        <header>
+            <div class="content-1200">
+                {% if not report %}
+                    <h1>Processing your search.</h1>
+                {% else %}
+                    <h1>Processed search successfully!</h1>
+                {% endif %}
+
+            </div>
+        </header>
+
+        <div class="content-1200">
+
+            {% if not report %}
+                <h2>Please refresh in a minute.</h2>
+            {% endif %}
+
+            {% autoescape off %}
+                {{ report }}
+            {% endautoescape %}
+        </div>
+
+    </article>
+{% endblock %}

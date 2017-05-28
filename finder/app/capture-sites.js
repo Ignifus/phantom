@@ -48,12 +48,12 @@ page.onLoadFinished = function(status) {
 
 function capture() {
 	console.log("Capturing: ", site.name);
-	page.render(params.PATH + site.name + '.png');
+	page.render("." + params.PATH + site.name + '.png');
 }
 
 function captureInner() {
     console.log("Capturing: ", inner.title);
-    page.render(params.PATH + inner.image);
+    page.render("." + params.PATH + inner.image);
     getLinks(results);
 }
 
@@ -123,7 +123,7 @@ function pageEvaluationOLX() {
 
 function buildReport(results) {
     console.log("BUILDING REPORT", results.length);
-    var table = "<style>.hide {max-height: 160px; overflow: hidden; } tr:nth-child(even) { background-color: #eee}</style><table><thead><tr>";
+    var table = "<style>.hide-p {max-height: 160px; overflow: hidden; } tr:nth-child(even) { background-color: #eee}</style><table><thead><tr>";
     Object.keys(results[0]).forEach(function(key) { table += ("<th>" + key + "</th>"); });
     table += "</tr></thead><tbody>";
 
@@ -133,7 +133,7 @@ function buildReport(results) {
             var value = result[key];
             if(key === "image") {
                 //TODO refactor bosta
-                value = '<div class="hide"><a href="captures/' + result[key] + '" __target="blank"><img src="' + params.PATH + result[key] + '" width="150"></a></div>';
+                value = '<div class="hide-p"><a href="' + params.PATH + result[key] + '" __target="blank"><img src="'+ params.PATH + result[key] + '" width="150"></a></div>';
             }
             if(key === "title") {
                 value = '<a href="' + result['url'] + '">' + value  + '</a>';
@@ -145,7 +145,7 @@ function buildReport(results) {
 
     table += "</tbody></table>";
     console.log(params.PATH + params.OUT);
-    fs.write(params.PATH + params.OUT, table, 'w');
+    fs.write('.' + params.PATH + params.OUT, table, 'w');
 }
 
 function buildParams() {

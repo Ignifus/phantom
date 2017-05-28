@@ -9,8 +9,57 @@
         </header>
 
         <div class="content-1200">
-            <h2>Finder</h2>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <form  method="post" class="form-horizontal" action="/find/">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="search">Buscar:</label>
+                            <div  class="col-sm-10">
+                                <input type="text" class="form-control" id="search" name="search">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="limit">Límite:</label>
+                            <div  class="col-sm-10">
+                                <label class="radio-inline"><input type="radio" name="optradio0">Ninguno</label>
+                                <label class="radio-inline"><input type="radio" name="optradio5">5 resultados</label>
+                                <label class="radio-inline"><input type="radio" name="optradio10">10 resultados</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="fader">Precio hasta</label>
+                            <div  class="col-sm-10">
+                                <input type="range" min="0" max="10000" value="5000" id="fader"
+                                       step="1" oninput="outputUpdate(value)" class="form-control" name="price">
+                            </div>
+                            <output for="fader" id="maxPrice">5000</output>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="sitio">Sitio</label>
+                            <div  class="col-sm-10">
+                                <select class="form-control" name="site">
+                                    <option value="all">Todos</option>
+                                    <option value="mercadolibre">Mercado Libre</option>
+                                    <option value="olx">OLX</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-default">Buscar</button>
+                    </form></div>
+                <div class="col-md-4"></div>
+            </div>
         </div>
+
+        <script type="text/javascript">
+
+            function outputUpdate(price) {
+                document.querySelector('#maxPrice').value = price;
+            }
+        </script>
 
     </article>
 {% endblock %}
