@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'x09=$(c77gt%%k!a3z%35_42)+me=b6$##*&=i+_@28k2a)iv('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -78,9 +78,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Phantom',
         'USER': 'phantom',
-        'PASSWORD': '******',
-        'HOST': 'remote.ignifus.com',
-        'PORT': '5002',
+        'HOST': '127.0.0.1',
     }
 }
 
